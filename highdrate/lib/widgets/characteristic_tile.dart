@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -28,10 +29,32 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   void initState() {
     super.initState();
     _lastValueSubscription =
-        widget.characteristic.lastValueStream.listen((value) {
-      setState(() {_value = value;});
+        widget.characteristic.onValueReceived.listen((value) {
+      // widget.characteristic.lastValueStream.listen((value) {
+      setState(() {
+        _value = value;
+      });
     });
   }
+
+// void listenToStream(Stream<List<int>> stream) {
+//   final buffer = StringBuffer();
+
+//   stream.listen(
+//     (List<int> data) {
+//       buffer.write(utf8.decode(data));
+//     },
+//     onDone: () {
+//       final jsonString = buffer.toString();
+//       final jsonData = json.decode(jsonString);
+//       // Process the JSON data here
+//       print(jsonData);
+//     },
+//     onError: (error) {
+//       print('Error occurred: $error');
+//     },
+//   );
+// }
 
   @override
   void dispose() {
@@ -94,8 +117,12 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   }
 
   Widget buildValue(BuildContext context) {
-    String data = _value.toString();
-    return Text(data, style: const TextStyle(fontSize: 13, color: Colors.grey));
+    String dataStr = utf8.decode(_value);
+    print(dataStr);
+    // Map data = json.decode(dataStr);
+    // String data = _value.toString();
+    return Text(dataStr,
+        style: const TextStyle(fontSize: 13, color: Colors.black));
   }
 
   Widget buildReadButton(BuildContext context) {

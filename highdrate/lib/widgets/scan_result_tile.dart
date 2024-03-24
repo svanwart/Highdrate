@@ -1,4 +1,5 @@
 import 'dart:async';
+// import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -50,11 +51,21 @@ class _ScanResultTileState extends State<ScanResultTile> {
   }
 
   String getNiceServiceData(Map<Guid, List<int>> data) {
+    print("getNiceServiceData has been invoked");
     return data.entries
         .map((v) => '${v.key}: ${getNiceHexArray(v.value)}')
         .join(', ')
         .toUpperCase();
   }
+
+  // String getNiceServiceData(Map<Guid, List<int>> data) {
+  //   print("getNiceServiceData has been invoked");
+  //   String jsonString = jsonEncode(data);
+
+  //   print("Does this work????" + jsonString);
+  //   return jsonString;
+  //   //return data.entries.map((v) => '${v.key}: ${getNiceHexArray(v.value)}').join(', ').toUpperCase();
+  // }
 
   String getNiceServiceUuids(List<Guid> serviceUuids) {
     return serviceUuids.join(', ').toUpperCase();
