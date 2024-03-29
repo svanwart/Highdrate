@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -41,20 +42,10 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
 
   BluetoothCharacteristic get c => widget.characteristic;
 
-  List<int> _getRandomBytes() {
-    final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
-  }
-
   Future onReadPressed() async {
     try {
       await c.read();
-      Snackbar.show(ABC.c, "Read: Success: ", success: true);
+      Snackbar.show(ABC.c, "Read: Success", success: true);
     } catch (e) {
       Snackbar.show(ABC.c, prettyException("Read Error:", e), success: false);
     }
@@ -81,7 +72,7 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
       if (c.properties.read) {
         await c.read();
       }
-      setState(() {});
+      setState(() {buildValue(context);});
     } catch (e) {
       Snackbar.show(ABC.c, prettyException("Subscribe Error:", e),
           success: false);
@@ -94,7 +85,7 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   }
 
   Widget buildValue(BuildContext context) {
-    String data = _value.toString();
+    String data = utf8.decode(_value);
     return Text(data, style: const TextStyle(fontSize: 13, color: Colors.grey));
   }
 
