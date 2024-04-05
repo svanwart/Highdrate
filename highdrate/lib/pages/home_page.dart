@@ -4,7 +4,11 @@ import 'stats_page.dart';
 import 'connect_page.dart';
 import 'timeline_page.dart';
 import 'settings_page.dart';
+import 'flutter_blue_app.dart';
 
+import 'package:flutter_reactive_value/flutter_reactive_value.dart';
+
+final ReactiveValueNotifier<List<double>> measurementList = ReactiveValueNotifier<List<double>>([]);
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -50,7 +54,7 @@ class HomePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ConnectPage()),
+                          builder: (context) => const FlutterBlueApp()),
                     );
                   },
                   child: Text('Connect'),

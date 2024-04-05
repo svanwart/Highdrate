@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import '../utils/snackbar.dart';
 import '../widgets/connected_device_tile.dart';
 import '../widgets/scan_result_tile.dart';
 import '../utils/extra.dart';
+import '../pages/stats_page.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -86,6 +88,7 @@ class _ScanScreenState extends State<ScanScreen> {
     MaterialPageRoute route = MaterialPageRoute(
         builder: (context) => DeviceScreen(device: device),
         settings: const RouteSettings(name: '/DeviceScreen'));
+    // MaterialPageRoute(builder: (context) => const StatsPage())
     Navigator.of(context).push(route);
   }
 

@@ -18,8 +18,10 @@ class ServiceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return characteristicTiles.isNotEmpty
-        ? ExpansionTile(
-            title: Column(
+        ? 
+        ExpansionTile(
+            title: 
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

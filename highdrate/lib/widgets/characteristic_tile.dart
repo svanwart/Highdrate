@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../pages/home_page.dart';
 import "../utils/snackbar.dart";
-
 import "descriptor_tile.dart";
 
 class CharacteristicTile extends StatefulWidget {
@@ -17,11 +17,11 @@ class CharacteristicTile extends StatefulWidget {
       {super.key, required this.characteristic, required this.descriptorTiles});
 
   @override
-  State<CharacteristicTile> createState() => _CharacteristicTileState();
+  State<CharacteristicTile> createState() => CharacteristicTileState();
 }
 
-class _CharacteristicTileState extends State<CharacteristicTile> {
-  List<int> _value = [];
+class CharacteristicTileState extends State<CharacteristicTile> {
+  List<int> value = [];
 
   late StreamSubscription<List<int>> _lastValueSubscription;
 
@@ -29,8 +29,8 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   void initState() {
     super.initState();
     _lastValueSubscription =
-        widget.characteristic.lastValueStream.listen((value) {
-      setState(() {_value = value;});
+        widget.characteristic.lastValueStream.listen((newValue) {
+      setState(() {value = newValue;});
     });
   }
 
@@ -85,7 +85,21 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   }
 
   Widget buildValue(BuildContext context) {
-    String data = utf8.decode(_value);
+    String data = utf8.decode(value);
+    try {
+      double measurement = double.parse(data);
+      List<double> copyList = List<double>.from(measurementList.value);
+      double previousMeasurement = -1.0;
+      if (copyList.isNotEmpty) {
+        previousMeasurement = copyList.last;
+      }
+      if (previousMeasurement == -1.0 || previousMeasurement <= measurement + 0.75) {
+        copyList.add(measurement);
+      }
+      measurementList.value = copyList;
+    } catch (e) {
+      print(e);
+    }
     return Text(data, style: const TextStyle(fontSize: 13, color: Colors.grey));
   }
 
