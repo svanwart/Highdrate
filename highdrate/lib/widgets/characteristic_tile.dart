@@ -93,10 +93,11 @@ class CharacteristicTileState extends State<CharacteristicTile> {
       if (copyList.isNotEmpty) {
         previousMeasurement = copyList.last;
       }
-      if (previousMeasurement == -1.0 || previousMeasurement <= measurement + 0.75) {
+      if (measurement <= 22.606 && (previousMeasurement == -1.0 || previousMeasurement <= measurement - 0.75)) {
         copyList.add(measurement);
       }
       measurementList.value = copyList;
+      print(measurementList.value);
     } catch (e) {
       print(e);
     }
