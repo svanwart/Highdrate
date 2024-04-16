@@ -31,8 +31,15 @@ class StatsPageState extends State<StatsPage> {
       if(allMeasurements.length >= 2) {
         previousMeasurement = allMeasurements[allMeasurements.length - 2];
         print("measurement before last measurement in list: $previousMeasurement");
+        // if(previousMeasurement < lastestMeasurement) {
+        //   totalOunces = totalOunces + (((lastestMeasurement - previousMeasurement).abs())/22.606*20).roundToDouble();
+        // }
+        totalOunces = totalOunces + (((lastestMeasurement - previousMeasurement).abs())/22.606*20).roundToDouble();
       }
-      totalOunces = allMeasurements.length >= 2 ? (totalOunces + (((lastestMeasurement - previousMeasurement).abs())/22.606*20).roundToDouble()) : (totalOunces + (lastestMeasurement/22.606*20).roundToDouble()); // water bottle is 22.606 cm, 20 ounce water bottle
+      if(allMeasurements.length < 2) {
+        totalOunces = totalOunces + (lastestMeasurement/22.606*20).roundToDouble();
+      }
+      //totalOunces = allMeasurements.length >= 2 ? (totalOunces + (((lastestMeasurement - previousMeasurement).abs())/22.606*20).roundToDouble()) : (totalOunces + (lastestMeasurement/22.606*20).roundToDouble()); // water bottle is 22.606 cm, 20 ounce water bottle
       print("total amount of ounces drank: $totalOunces");
       percentageRecommendedIntake = (totalOunces/110); // 91 ounces to 125 ounces of water per day
       percentAway = (1 - percentageRecommendedIntake) * 100;
