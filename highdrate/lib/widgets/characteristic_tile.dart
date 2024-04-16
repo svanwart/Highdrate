@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
+import '../pages/home_page.dart';
 import "../utils/snackbar.dart";
-
 import "descriptor_tile.dart";
 
 class CharacteristicTile extends StatefulWidget {
@@ -17,11 +17,11 @@ class CharacteristicTile extends StatefulWidget {
       {super.key, required this.characteristic, required this.descriptorTiles});
 
   @override
-  State<CharacteristicTile> createState() => _CharacteristicTileState();
+  State<CharacteristicTile> createState() => CharacteristicTileState();
 }
 
-class _CharacteristicTileState extends State<CharacteristicTile> {
-  List<int> _value = [];
+class CharacteristicTileState extends State<CharacteristicTile> {
+  List<int> value = [];
 
   late StreamSubscription<List<int>> _lastValueSubscription;
 
@@ -29,10 +29,9 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   void initState() {
     super.initState();
     _lastValueSubscription =
-        widget.characteristic.onValueReceived.listen((value) {
-      // widget.characteristic.lastValueStream.listen((value) {
+        widget.characteristic.lastValueStream.listen((newValue) {
       setState(() {
-        _value = value;
+        value = newValue;
       });
     });
   }
@@ -64,20 +63,10 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
 
   BluetoothCharacteristic get c => widget.characteristic;
 
-  List<int> _getRandomBytes() {
-    final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
-  }
-
   Future onReadPressed() async {
     try {
       await c.read();
-      Snackbar.show(ABC.c, "Read: Success: ", success: true);
+      Snackbar.show(ABC.c, "Read: Success", success: true);
     } catch (e) {
       Snackbar.show(ABC.c, prettyException("Read Error:", e), success: false);
     }
@@ -104,7 +93,9 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
       if (c.properties.read) {
         await c.read();
       }
-      setState(() {});
+      setState(() {
+        buildValue(context);
+      });
     } catch (e) {
       Snackbar.show(ABC.c, prettyException("Subscribe Error:", e),
           success: false);
@@ -117,12 +108,29 @@ class _CharacteristicTileState extends State<CharacteristicTile> {
   }
 
   Widget buildValue(BuildContext context) {
-    String dataStr = utf8.decode(_value);
-    print(dataStr);
-    // Map data = json.decode(dataStr);
-    // String data = _value.toString();
-    return Text(dataStr,
-        style: const TextStyle(fontSize: 13, color: Colors.black));
+    // String dataStr = utf8.decode(_value);
+    // print(dataStr);
+    // // Map data = json.decode(dataStr);
+    // // String data = _value.toString();
+    // return Text(dataStr,
+    //     style: const TextStyle(fontSize: 13, color: Colors.black));
+    String data = utf8.decode(value);
+    try {
+      double measurement = double.parse(data);
+      List<double> copyList = List<double>.from(measurementList.value);
+      // double previousMeasurement = -1.0;
+      // if (copyList.isNotEmpty) {
+      //   previousMeasurement = copyList.last;
+      // }
+      if (measurement <= 22.606) {
+        copyList.add(measurement);
+      }
+      measurementList.value = copyList;
+      print(measurementList.value);
+    } catch (e) {
+      print(e);
+    }
+    return Text(data, style: const TextStyle(fontSize: 13, color: Colors.grey));
   }
 
   Widget buildReadButton(BuildContext context) {

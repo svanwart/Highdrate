@@ -36,15 +36,6 @@ class _DescriptorTileState extends State<DescriptorTile> {
 
   BluetoothDescriptor get d => widget.descriptor;
 
-  List<int> _getRandomBytes() {
-    final math = Random();
-    return [
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255),
-      math.nextInt(255)
-    ];
-  }
 
   Future onReadPressed() async {
     try {
