@@ -9,6 +9,7 @@ import '../pages/home_page.dart';
 import "../utils/snackbar.dart";
 import "descriptor_tile.dart";
 
+//
 class CharacteristicTile extends StatefulWidget {
   final BluetoothCharacteristic characteristic;
   final List<DescriptorTile> descriptorTiles;
