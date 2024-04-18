@@ -29,6 +29,7 @@ class CharacteristicTileState extends State<CharacteristicTile> {
   @override
   void initState() {
     super.initState();
+    characteristic.value = widget.characteristic;
     _lastValueSubscription =
         widget.characteristic.lastValueStream.listen((newValue) {
       setState(() {

@@ -12,6 +12,8 @@ import 'package:flutter_reactive_value/flutter_reactive_value.dart';
 final ReactiveValueNotifier<List<double>> measurementList =
     ReactiveValueNotifier<List<double>>([]);
 
+final ReactiveValueNotifier characteristic = ReactiveValueNotifier(null);
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
